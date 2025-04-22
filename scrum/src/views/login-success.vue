@@ -81,7 +81,7 @@ const newTopic = ref("");
 const router = useRouter()
 
 const goToDailyScrumPage = () => {
-  router.push('/daily-scrum')
+  router.push('/add-daily')
 }
 
 const form = ref({
