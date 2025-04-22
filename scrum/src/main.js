@@ -10,6 +10,7 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(GoogleLogin, {
-  clientId: "YOUR_GOOGLE_CLIENT_ID", // 👈 ใส่ client ID ที่คุณได้จาก Google
+  clientId:
+    "",
 });
 app.mount("#app");

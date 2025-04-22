@@ -1,82 +1,61 @@
 <template>
-  <div>
-    <div class="flex justify-center mt-12">
-      <label class="text-5xl font-noto">LOGIN</label>
-    </div>
-    <div class="flex justify-center">
-      <div class="w-1/3">
-        <div class="flex flex-col mt-20 gap-2">
-          <label>username</label>
-          <input
-            type="text"
-            v-model="username"
-            class="border-2 border-gray-300 rounded-md p-2 focus:outline-none"
-            placeholder="username"
-          />
-        </div>
-        <div class="flex flex-col mt-10 gap-2">
-          <label>password</label>
-          <input
-            type="text"
-            v-model="password"
-            class="border-2 border-gray-300 rounded-md p-2 focus:outline-none"
-            placeholder="password"
-          />
-        </div>
+  <div class="flex justify-center">
+    <div class="w-1/3">
+      <div class="flex flex-col mt-20 gap-2">
+        <label>username</label>
+        <input type="text" v-model="username" class="border-2 border-gray-300 rounded-md p-2 focus:outline-none"
+          placeholder="username" />
       </div>
-    </div>
-    <div class="px-10">
-      <hr class="my-8 border-gray-400" />
-    </div>
-    <div class="space-y-24">
-      <div class="flex justify-center">
-        <GoogleLogin :callback="callback" />
+      <div class="flex flex-col mt-10 gap-2">
+        <label>password</label>
+        <input type="text" v-model="password" class="border-2 border-gray-300 rounded-md p-2 focus:outline-none"
+          placeholder="password" />
       </div>
-      <button
-        @click="login"
-        class="bg-blue-300 px-6 py-2 rounded-md text-sm block mx-auto"
-      >
-        login
+      <button @click="login" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Login
       </button>
     </div>
   </div>
+  <div>
+    <button @click="loginWithGoogle">Sign in with Google</button>
+  </div>
 </template>
+
 <script setup>
-import { ref } from "vue";
-import { useAuthStore } from "../stores/auth";
-// import { useGoogleLogin } from 'vue3-google-login'
+import { ref } from "vue"
+import axios from "axios"
+import { useRouter } from "vue-router"
+// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const username = ref("");
-const password = ref("");
-const auth = useAuthStore();
+// console.log(BACKEND_URL)
+const router = useRouter()
 
-const login = () => {
-  if (username.value && password.value) {
-    auth.login(username.value);
-    console.log("Logged in as", auth.username);
-  } else {
-    alert("Please enter username and password");
+const username = ref("")
+const password = ref("")
+
+// Replace this with your real backend URL (using .env or hardcoded)
+const BACKEND_URL = "https://2e2f-184-82-25-53.ngrok-free.app"
+
+async function login() {
+  try {
+    const res = await axios.post(`${BACKEND_URL}/api/user/login`, {
+      username: username.value,
+      password: password.value,
+    }, {
+      withCredentials: true
+    })
+
+    alert(res.data.message) // or redirect or update store
+    console.log("Login successful:", res.data)
+    router.push('/login-success')
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed")
+    console.error("Login error:", error)
   }
-};
-const callback = (response) => {
-  // This callback will be triggered when the user selects or login to
-  // his Google account from the popup
-  console.log("Handle the response", response)
 }
 
-// const { signIn } = useGoogleLogin({
-//   onSuccess: (response) => {
-//     console.log('Google login success', response)
-//     auth.loginWithGoogle(response)
-//   },
-//   onError: (err) => {
-//     console.error('Google login failed', err)
-//     alert('Google login failed')
-//   }
-// })
+function loginWithGoogle() {
+  window.location.href = `${BACKEND_URL}/auth/google?ngrok-skip-browser-warning=true`;
+}
 
-// const loginWithGoogle = () => {
-//   signIn()
-// }
 </script>
-<style scoped></style>
