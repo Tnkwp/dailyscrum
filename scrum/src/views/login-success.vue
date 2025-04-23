@@ -26,7 +26,7 @@
           <input
             type="text"
             v-model="newTopic"
-            class="w-full border px-3 py-2 rounded mb-4"
+            class="text-gray-400 w-full border px-3 py-2 rounded mb-4"
             placeholder="เช่น หัวข้อ daily-scrum"
           />
 
@@ -63,7 +63,23 @@
       <p>สภาพที่ใช้ในการทำงาน</p>
       <p>ปัญหาที่พบ</p>
       <p>พรุ่งนี้จะทำอะไร</p>
-      <p></p>
+      <div>
+        <button @click="showModal2 = true" class="border px-2 py-1 rounded">
+          comment
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="showModal2"
+      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+    >
+      <div>
+        <div class="bg-white p-6 rounded shadow-md w-[650px] h-auto">
+          <div class="flex justify-end">
+            <button class="border px-2 py-1 rounded">เพิ่ม review</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,15 +90,16 @@ import { ref } from "vue";
 const selectedTopic = ref("หัวข้อ daily-scrum");
 const showMenu = ref(false);
 const topics = ref(["หัวข้อ daily-scrum", "หัวข้อ 1", "หัวข้อ 2"]);
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
 const showModal = ref(false);
+const showModal2 = ref(false);
 const newTopic = ref("");
-const router = useRouter()
+const router = useRouter();
 
 const goToDailyScrumPage = () => {
-  router.push('/add-daily')
-}
+  router.push("/add-daily");
+};
 
 const form = ref({
   name: "",

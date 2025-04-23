@@ -39,18 +39,21 @@ const username = ref("")
 const password = ref("")
 
 // Replace this with your real backend URL (using .env or hardcoded)
-const BACKEND_URL = "https://2e2f-184-82-25-53.ngrok-free.app"
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
 
 async function login() {
   try {
-    const res = await axios.post(`${BACKEND_URL}/api/user/login`, {
+    const res = await axios.post(`${backendUrl}/api/user/login`, {
       username: username.value,
       password: password.value,
     }, {
       withCredentials: true
     })
 
+
     alert(res.data.message) // or redirect or update store
+    localStorage.setItem("token", res.data.token)
+
     console.log("Login successful:", res.data)
     router.push('/login-success')
   } catch (error) {
@@ -60,7 +63,7 @@ async function login() {
 }
 
 function loginWithGoogle() {
-  window.location.href = `${BACKEND_URL}/auth/google?ngrok-skip-browser-warning=true`;
+  window.location.href = `${backendUrl}/auth/google?ngrok-skip-browser-warning=true`;
 }
 
 </script>

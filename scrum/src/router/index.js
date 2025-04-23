@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import DailyList from "../views/login-success.vue";
 import AddDaily from "../views/AddDaily.vue";
+import info from "../views/info.vue";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/add-daily",
     name: "AddDaily",
     component: AddDaily,
+  },
+  {
+    path: "/info",
+    name: "info",
+    component: info,
   },
 ];
 
