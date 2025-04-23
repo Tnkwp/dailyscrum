@@ -76,8 +76,11 @@
       <div>
         <div class="bg-white p-6 rounded shadow-md w-[650px] h-auto">
           <div class="flex justify-end">
-            <button class="border px-2 py-1 rounded">เพิ่ม review</button>
+            <button @click="showModal3 = true" class="border px-2 py-1 rounded">เพิ่ม review</button>
           </div>
+        </div>
+        <div v-if="showModal3" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div class="bg-white p-6 rounded shadow-md w-[650px] h-auto"></div>
         </div>
       </div>
     </div>
@@ -94,6 +97,7 @@ import { useRouter } from "vue-router";
 
 const showModal = ref(false);
 const showModal2 = ref(false);
+const showModal3 = ref(false);
 const newTopic = ref("");
 const router = useRouter();
 
