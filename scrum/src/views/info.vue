@@ -39,7 +39,8 @@ onMounted(async () => {
     });
 
     console.log('Response:', response); // Full response log
-    user.value = response.data.user;
+    user.value = response.data.info;
+    
   } catch (error) {
     console.error('Error details:', {
       message: error.message,
