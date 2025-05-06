@@ -6,7 +6,6 @@
     </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-4 max-w-3xl mx-auto">
-
       <div class="relative w-1/4">
         <div
           class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
@@ -28,7 +27,7 @@
           id="default-datepicker"
           type="text"
           v-model="form.date"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date"
         />
       </div>
@@ -119,11 +118,13 @@
         <button
           type="button"
           @click="handleCancel"
-          class="bg-gray-300 px-4 py-2 rounded"
+          class="bg-red-500 px-4 py-2 rounded"
         >
           ยกเลิก
         </button>
-        <button type="submit" class="bg-gray-400 px-4 py-2 rounded">โพส</button>
+        <button type="submit" class="bg-green-600 px-4 py-2 rounded">
+          โพส
+        </button>
       </div>
     </form>
   </div>
@@ -131,7 +132,7 @@
 
 <script setup>
 import { ref } from "vue";
-import 'flowbite'
+import "flowbite";
 
 const form = ref({
   date: "",

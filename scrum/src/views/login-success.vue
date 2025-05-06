@@ -8,7 +8,7 @@
             {{ topic }}
           </option>
         </select>
-        <button @click="showModal = true" class="bg-gray-200 px-2 py-1 rounded">
+        <button @click="showModal = true" class="bg-gray-200 px-2 rounded-full">
           +
         </button>
       </div>
@@ -44,28 +44,57 @@
         </div>
       </div>
       <div class="relative flex justify-end items-center">
-        <button v-if="user" @click="showMenu = !showMenu" class="bg-gray-200 px-4 py-1 rounded flex items-center">
-          {{ user.username }} <img :src="user.profilePic" alt="profile" class="w-6 h-6 border-2 border-gray-300 rounded-full ms-2" />
+        <button
+          v-if="user"
+          @click="showMenu = !showMenu"
+          class="bg-gray-200 px-4 py-1 rounded flex items-center"
+        >
+          {{ user.username }}
+          <img
+            :src="user.profilePic"
+            referrerpolicy="no-referrer"
+            alt="profile"
+            class="w-6 h-6 border-2 border-gray-300 rounded-full ms-2"
+          />
         </button>
-        <div v-if="showMenu" class="absolute right-0 top-10 mt-2 w-32 bg-white shadow rounded z-10">
-          <button @click="handleLogout" class="block w-full text-left px-4 py-2 hover:bg-gray-100">logout</button>
+        <div
+          v-if="showMenu"
+          class="absolute right-0 top-10 mt-2 w-32 bg-white shadow rounded z-10"
+        >
+          <button
+            @click="handleLogout"
+            class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+          >
+            logout
+          </button>
         </div>
       </div>
-      <div @click="goToDailyScrumPage" class="col-end-4 flex justify-end items-center">
-        <button class="bg-gray-200 px-2 py-1 rounded">add daily-scrum</button>
+      <div
+        @click="goToDailyScrumPage"
+        class="col-end-4 flex justify-end items-center"
+      >
+        <button class="bg-blue-400 text-white px-2 py-1 rounded">add daily-scrum</button>
       </div>
     </div>
     <div class="bg-white p-4 rounded shadow">
-      <p class="font-bold mb-2">ชื่อ</p>
-      <p>dd/mm/yyyy</p>
-      <p>สิ่งที่ทำวันนี้</p>
-      <p>สภาพที่ใช้ในการทำงาน</p>
-      <p>ปัญหาที่พบ</p>
-      <p>พรุ่งนี้จะทำอะไร</p>
-      <div>
-        <button @click="showModal2 = true" class="border px-2 py-1 rounded">
-          comment
-        </button>
+      <div class="p-4 space-y-6">
+        <div
+          v-for="(task, index) in tasks"
+          :key="index"
+          class="p-4 border-b border-gray-200"
+        >
+          <p class="font-bold mb-2">{{ task.name }}</p>
+          <p>{{ task.date }}</p>
+          <p>สิ่งที่ทำวันนี้ <br> {{ task.todayWork }}</p>
+          <p>สกิลที่ใช้ในการทำงาน <br> {{ task.skillsUsed }}</p>
+          <p>ปัญหาที่พบ <br> {{ task.problem }}</p>
+          <p>พรุ่งนี้จะทำอะไร <br> {{ task.tomorrowPlan }}</p>
+          <div>
+            <button @click="showModal2 = true" class="border px-2 py-1 rounded">
+              review
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -100,44 +129,34 @@
               <label>ให้คะแนน</label>
               <div>
                 <div class="flex items-center">
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
+                  <template v-for="star in 5" :key="star">
+                    <svg
+                      @click="setRating(star)"
+                      :class="[
+                        'w-6 h-6 cursor-pointer',
+                        star <= rating
+                          ? 'text-yellow-300'
+                          : 'text-gray-300 dark:text-gray-500',
+                      ]"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 22 20"
+                    >
+                      <path
+                        d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                      />
+                    </svg>
+                  </template>
                 </div>
               </div>
             </div>
             <div class="flex justify-end space-x-4 mt-4">
-              <button @click="cancelModal" class="bg-gray-300 px-4 py-2 rounded">ยกเลิก</button>
+              <button
+                @click="cancelModal"
+                class="bg-gray-300 px-4 py-2 rounded"
+              >
+                ยกเลิก
+              </button>
               <button class="bg-gray-400 px-4 py-2 rounded">โพส</button>
             </div>
           </div>
@@ -165,9 +184,37 @@ const showModal3 = ref(false);
 const newTopic = ref("");
 const review = ref("");
 const router = useRouter();
-const user = ref(null)
+const user = ref(null);
+const rating = ref(0);
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+const tasks = ref([
+  {
+    name: "สมชาย ใจดี",
+    date: "28/04/2025",
+    todayWork: "-พัฒนาเว็บไซต์หน้า dashboard",
+    skillsUsed: "-Vue.js, Tailwind CSS, Git",
+    problem: "-อินเทอร์เน็ตมีปัญหาในช่วงบ่าย",
+    tomorrowPlan: "-ทดสอบระบบ และเริ่มทำหน้า Login",
+  },
+  {
+    name: "สมหญิง แข็งแรง",
+    date: "29/04/2025",
+    todayWork: "-ออกแบบฐานข้อมูล",
+    skillsUsed: "-MySQL, DB Diagram",
+    problem: "-เข้าใจไม่ตรงกับลูกค้า",
+    tomorrowPlan: "-แก้ไข schema และประชุมอีกครั้ง",
+  },
+  {
+    name: "สมปอง รุ่งเรือง",
+    date: "30/04/2025",
+    todayWork: "-พัฒนา API backend",
+    skillsUsed: "-Node.js, Express, Postman",
+    problem: "-พบ error เรื่องการ auth",
+    tomorrowPlan: "-แก้ไข middleware และเขียน test case",
+  },
+]);
 
 const token = ref(null);
 onMounted(() => {
@@ -192,10 +239,10 @@ function goToInfoPage() {
 
 onMounted(async () => {
   try {
-    console.log('Making request to:', BACKEND_URL); // Debug log
+    console.log("Making request to:", BACKEND_URL); // Debug log
 
     const token = localStorage.getItem("token");
-    
+
     // If there's no token, handle it here (e.g., show an alert or redirect)
     if (!token) {
       console.error("No token found. Please log in.");
@@ -204,56 +251,56 @@ onMounted(async () => {
 
     const response = await axios.get(`${BACKEND_URL}/api/user/info`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'ngrok-skip-browser-warning': "true"
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true",
       },
-      withCredentials: true
+      withCredentials: true,
     });
 
-    console.log('Response:', response); // Full response log
+    console.log("Response:", response); // Full response log
     user.value = response.data.info;
-    
   } catch (error) {
-    console.error('Error details:', {
+    console.error("Error details:", {
       message: error.message,
       response: error.response?.data,
-      status: error.response?.status
+      status: error.response?.status,
     });
   }
 });
 
 const handleLogout = async () => {
-    error.value = null;  // Clear any previous error messages
+  error.value = null; // Clear any previous error messages
 
-    try {
-        const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-        const response = await axios.post(
-            `${BACKEND_URL}/api/user/logout`,
-            {}, // no request body
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-                withCredentials: true
-            }
-        );
+    const response = await axios.post(
+      `${BACKEND_URL}/api/user/logout`,
+      {}, // no request body
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
 
-        // Clear token from localStorage (client-side logout)
-        localStorage.removeItem("token");
+    // Clear token from localStorage (client-side logout)
+    localStorage.removeItem("token");
 
-        router.push('/');  // Redirect to home page
-
-    } catch (err) {
-        if (err.response) {
-            error.value = err.response.data.message || 'Logout failed.';
-        } else {
-            error.value = 'Network error';
-        }
+    router.push("/"); // Redirect to home page
+  } catch (err) {
+    if (err.response) {
+      error.value = err.response.data.message || "Logout failed.";
+    } else {
+      error.value = "Network error";
     }
+  }
 };
 
-
+function setRating(value) {
+  rating.value = value;
+}
 
 const goToDailyScrumPage = () => {
   router.push("/add-daily");
@@ -285,11 +332,11 @@ const addTopic = () => {
 const cancelModal = () => {
   newTopic.value = "";
   review.value = "";
+  rating.value = 0;
   showModal.value = false;
   showModal2.value = false;
   showModal3.value = false;
 };
-
 </script>
 
 <style scoped>
