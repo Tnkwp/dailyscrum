@@ -74,7 +74,7 @@
                 />
               </svg>
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span class="font-semibold">Click to upload</span> or drag and
+                <span class="font-semibold"> Click to upload</span> or drag and
                 drop
               </p>
             </div>
