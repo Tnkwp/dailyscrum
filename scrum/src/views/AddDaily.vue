@@ -1,41 +1,19 @@
 <template>
-  <div class="min-h-screen bg-white p-6">
+  <div class="min-h-screen bg-white p-6 font-noto">
     <!-- Back button -->
     <div class="mb-4">
       <button @click="goBack" class="text-red-500 text-xl">◀</button>
     </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-4 max-w-3xl mx-auto">
-      <div class="relative w-1/4">
-        <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-            />
-          </svg>
-        </div>
-        <input
-          datepicker
-          id="default-datepicker"
-          type="text"
-          v-model="form.date"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Select date"
-        />
+      <div class="w-1/4">
+        <Datepicker v-model="form.createdAt" format="dd/MM/yyyy" />
       </div>
 
       <!-- Daily Scrum -->
       <div>
-        <label class="block font-semibold mb-1"
-          >daily-scrum สิ่งที่ทำวันนี้</label
+        <label class="block font-noto font-semibold mb-1"
+          >Daily-scrum สิ่งที่ทำวันนี้</label
         >
         <textarea
           v-model="form.dailyScrum"
@@ -46,15 +24,15 @@
 
       <!-- Properties -->
       <div>
-        <label class="block font-semibold mb-1"
-          >proptoties สกิลที่ใช้ในการทำงาน</label
+        <label class="block font-noto font-semibold mb-1"
+          >Proptoties สกิลที่ใช้ในการทำงาน</label
         >
-        <input v-model="form.properties" class="w-full border p-2 rounded" />
+        <input v-model="form.properties" class="w-full border p-2 rounded focus:outline-none" />
       </div>
 
       <!-- Problem -->
       <div>
-        <label class="block font-semibold mb-1">problem ปัญหาที่พบ</label>
+        <label class="block font-noto font-semibold mb-1">Problem ปัญหาที่พบ</label>
         <textarea
           v-model="form.problem"
           class="w-full border p-2 rounded"
@@ -64,7 +42,7 @@
 
       <!-- Todo -->
       <div>
-        <label class="block font-semibold mb-1">todo พรุ่งนี้จะทำอะไร</label>
+        <label class="block font-noto font-semibold mb-1">Todo พรุ่งนี้จะทำอะไร</label>
         <textarea
           v-model="form.todo"
           class="w-full border p-2 rounded"
@@ -76,7 +54,7 @@
       <div>
         <div class="flex items-center justify-center w-full">
           <label
-            for="dropzone-file"
+            for="files"
             class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
           >
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -99,12 +77,9 @@
                 <span class="font-semibold">Click to upload</span> or drag and
                 drop
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
-              </p>
             </div>
             <input
-              id="dropzone-file"
+              id="files"
               type="file"
               class="hidden"
               @change="handleFileChange"
@@ -114,11 +89,11 @@
       </div>
 
       <!-- Buttons -->
-      <div class="flex justify-center space-x-4 mt-6">
+      <div class="flex justify-center space-x-4 mt-6 font-noto">
         <button
           type="button"
           @click="handleCancel"
-          class="bg-red-500 px-4 py-2 rounded"
+          class="bg-red-500 px-4 py-2 rounded text-white"
         >
           ยกเลิก
         </button>
@@ -133,14 +108,16 @@
 <script setup>
 import { ref } from "vue";
 import "flowbite";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 const form = ref({
-  date: "",
-  dailyScrum: "",
+  createdAt: "",
+  daily: "",
   properties: "",
   problem: "",
   todo: "",
-  file: null,
+  files: null,
 });
 
 const goBack = () => {
