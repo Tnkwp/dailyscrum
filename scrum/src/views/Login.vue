@@ -41,11 +41,12 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { useUserStore } from "../stores/auth";
+
 
 // console.log(BACKEND_URL)
 const router = useRouter();
-
+const userStore = useUserStore();
 const username = ref("");
 const password = ref("");
 
@@ -65,10 +66,11 @@ async function login() {
       }
     );
 
-    alert(res.data.msg); // or redirect or update store
+    alert(res.data.msg);
     localStorage.setItem("token", res.data.token);
 
-    console.log("Login successful:", res.data);
+    // บันทึกใน Pinia store
+    userStore.setUser(username.value, res.data.token);
     router.push("/login-success");
   } catch (error) {
     alert(error.response?.data?.msg || "Login failed");

@@ -16,6 +16,7 @@
     "flowbite": "^3.1.2",
     "pinia": "^3.0.2",
     "router": "^2.2.0",
+    "sweetalert2": "^11.21.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue3-google-login": "^2.0.33",

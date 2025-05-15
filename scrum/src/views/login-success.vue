@@ -70,10 +70,9 @@
         </div>
       </div>
       <div
-        @click="goToDailyScrumPage"
         class="col-end-4 flex justify-end items-center"
       >
-        <button class="bg-blue-400 text-white px-2 py-1 rounded">add daily-scrum</button>
+        <button @click="goToDailyScrumPage" class="bg-blue-400 text-white px-2 py-1 rounded">add daily-scrum</button>
       </div>
     </div>
     <div class="bg-white p-4 rounded shadow">
