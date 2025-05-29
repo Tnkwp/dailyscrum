@@ -1,14 +1,31 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-6 font-noto">
     <!-- Loading User -->
-    <div v-if="!user">
-      <p>Loading user info...</p>
-    </div>
-    <div v-else>
+
+    <div>
       <!-- Header -->
       <div class="grid grid-cols-3 gap-4 mb-6">
         <div class="col-start-2 justify-center items-center">
-          <Filterdaily />
+          <!-- 🔽 Dropdown Filter -->
+          <select
+            v-model="selectedTitle"
+            class="border p-2 rounded w-[150px] mb-2"
+          >
+            <option value="">ทั้งหมด</option>
+            <option
+              v-for="option in titleOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+          <button
+            @click="showModal = true"
+            class="bg-gray-200 px-2 rounded-full ml-2"
+          >
+            +
+          </button>
         </div>
         <div class="relative flex justify-end items-center">
           <button
@@ -48,36 +65,43 @@
       </div>
       <div class="bg-white p-4 rounded shadow">
         <div class="p-4 space-y-6">
-          <!-- 🔽 Dropdown Filter -->
-          <select
-            v-model="selectedTitle"
-            class="border p-2 rounded w-full mb-2"
+          
+          <div
+            v-if="showModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
           >
-            <option value="">ทั้งหมด</option>
-            <option
-              v-for="option in titleOptions"
-              :key="option"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
+            <div class="bg-white p-6 rounded shadow-md w-96">
+              <h2 class="text-xl font-semibold text-center mb-4">
+                สร้างหัวข้อใหม่
+              </h2>
 
-          <div class="flex items-center space-x-2 mb-4">
-            <input
-              v-model="title_name"
-              type="text"
-              placeholder="เพิ่มหัวข้อใหม่"
-              class="border p-2 rounded flex-1"
-            />
-            <button
-              @click="addNewTitle"
-              class="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              เพิ่ม
-            </button>
+              <label class="block mb-2">ชื่อหัวข้อ</label>
+              <input
+                type="text"
+                v-model="title_name"
+                class="text-gray-400 w-full border px-3 py-2 rounded mb-4"
+                placeholder="เช่น หัวข้อ daily-scrum"
+              />
+
+              <div class="flex justify-end space-x-4">
+                <button
+                  @click="cancelModal"
+                  class="bg-gray-300 px-4 py-1 rounded"
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  @click="addNewTitle"
+                  class="bg-blue-500 text-white px-4 py-1 rounded"
+                >
+                  ตกลง
+                </button>
+              </div>
+            </div>
           </div>
-
+          <div v-if="!user">
+            <p>Loading user info...</p>
+          </div>
           <!-- 🔁 รายการ DailyScrum -->
           <div
             v-for="dailyScrum in filteredDailyScrums"
@@ -118,6 +142,7 @@
                 เพิ่ม review
               </button>
             </div>
+            <span class="text-[18px] font-"> รีวิว </span>
           </div>
           <!-- Modal Layer 3 -->
           <div
@@ -185,6 +210,7 @@ import Filterdaily from "../components/filterdaily.vue";
 const showMenu = ref(false);
 const route = useRoute();
 const error = ref(null);
+const showModal = ref(false);
 const showModal2 = ref(false);
 const showModal3 = ref(false);
 const review = ref("");
@@ -250,7 +276,6 @@ const fetchDailyScrum = async () => {
     dailyScrums.value = response.data.dailyScrums || [];
     const titles = dailyScrums.value.map((item) => item.title).filter(Boolean);
     titleOptions.value = [...new Set(titles)];
-    console.log("Daily Scrums:", titleOptions.value);
   } catch (error) {
     console.error("Error fetching daily scrum:", error);
   }
@@ -285,6 +310,7 @@ const addNewTitle = async () => {
       titleOptions.value.push(newTitle);
       selectedTitle.value = newTitle;
       title_name.value = "";
+      showModal.value = false;
       console.log("New title added:", newTitle);
     } catch (error) {
       alert("เกิดข้อผิดพลาดในการเพิ่มหัวข้อ");
