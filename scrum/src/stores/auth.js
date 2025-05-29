@@ -5,6 +5,10 @@ export const useUserStore = defineStore("user", {
     username: "",
     token: "",
   }),
+  getters: {
+    isLoggedIn: (state) => !!state.token,
+    getUsername: (state) => state.username,
+  },
   actions: {
     setUser(username, token) {
       this.username = username;
