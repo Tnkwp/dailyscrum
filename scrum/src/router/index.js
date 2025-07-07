@@ -4,10 +4,10 @@ import DailyList from "../views/login-success.vue";
 import AddDaily from "../views/AddDaily.vue";
 import Info from "../views/info.vue";
 import NotFound from "../views/NotFound.vue";
-
-// 1. Uppercase Info component for consistency
-// 2. Fix history import (no change needed)
-// 3. No major bug, but scrollBehavior fallback for browsers not supporting smooth
+import EditDaily from "../views/EditDaily.vue";
+import Register from "../views/register.vue";
+import Forget from "../views/Forgot.vue";
+import Perspective from "../views/Perspective.vue";
 
 const routes = [
   {
@@ -32,6 +32,27 @@ const routes = [
     name: "Info", 
     component: Info,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/daily-scrum/:id",
+    name: "EditDaily",
+    component: EditDaily,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
+  },
+  {
+    path: "/forgot-password",
+    name: "Forget",
+    component: Forget,
+  },
+  {
+    path: "/perspective",
+    name: "Perspective",
+    component: Perspective,
   },
   {
     path: "/:pathMatch(.*)*",

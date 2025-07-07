@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white p-6 font-noto">
+  <div class="min-h-screen bg-white p-6 font-noto pt-20">
     <!-- Back button -->
     <div class="mb-4">
       <button @click="goBack" class="text-red-500 text-xl">◀</button>
@@ -9,11 +9,6 @@
       <div class="w-1/4">
         <Datepicker v-model="form.createdAt" format="dd/MM/yyyy" />
       </div>
-      <input
-        v-model="form.title"
-        placeholder="หัวข้อ"
-        class="border p-2 rounded flex-1"
-      />
       <!-- Daily Scrum -->
       <div>
         <label class="block font-noto font-semibold mb-1"
@@ -127,13 +122,14 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import "flowbite";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const router = useRouter();
 const route = useRoute();
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 const defaultTitle = ref(route.query.title || "");
@@ -208,7 +204,8 @@ const handleSubmit = () => {
           title: "Success",
           text: "Daily Scrum added successfully!",
         });
-        handleCancel();
+        router.push("/login-success");
+        // handleCancel();
       })
       .catch((error) => {
         console.error(error);
