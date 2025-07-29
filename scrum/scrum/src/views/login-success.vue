@@ -33,8 +33,11 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
 import ProjectCard from "./ProjectCard.vue";
 import ProjectFormModal from "../components/ProjectFormModal.vue";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 const showModal = ref(false);
 

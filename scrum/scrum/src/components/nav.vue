@@ -24,7 +24,7 @@
               class="bg-gray-200 rounded-full flex items-center"
             >
               <img
-                :src="user.profile_pic"
+                :src="user?.profile_pic || '/user.png'"
                 referrerpolicy="no-referrer"
                 alt="profile"
                 class="w-7 h-7 border-2 border-gray-300 rounded-full"

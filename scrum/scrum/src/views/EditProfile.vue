@@ -13,7 +13,7 @@
           <div class="relative">
             <!-- Profile Image Preview -->
             <img
-              :src="form.profile_pic"
+              :src="form.profile_pic || '/user.png'"
               class="w-24 h-24 rounded-full object-cover border border-gray-300"
             />
 
@@ -215,6 +215,7 @@ const updateProfile = async () => {
 
     Swal.fire("สำเร็จ", "อัปเดตข้อมูลเรียบร้อยแล้ว", "success");
     // router.back();
+    location.reload();
   } catch (err) {
     console.error("Update error:", err);
     Swal.fire(
