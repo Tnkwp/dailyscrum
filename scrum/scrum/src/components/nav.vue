@@ -1,7 +1,7 @@
 <template>
   <div class="fixed w-full z-20">
     <nav
-      class="px-4 py-2 w-full shadow-md bg-[#059669] font-noto flex justify-between"
+      class="px-4 py-2 w-full shadow-md bg-[#059669] font-noto flex justify-between #324671"
     >
       <div class="flex items-center gap-3">
         <!-- <img src="/images.webp" alt="" class="w-10 h-10 rounded-full" /> -->
