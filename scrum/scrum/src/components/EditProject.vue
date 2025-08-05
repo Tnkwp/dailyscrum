@@ -144,7 +144,7 @@
           Cancel
         </button>
         <button
-          @click="submitForm"
+          @click="updateProject"
           class="px-4 py-1 bg-[#10B981] text-white rounded"
         >
           Confirm
@@ -154,14 +154,174 @@
   </div>
 </template>
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { useRoute } from 'vue-router'
-import axios from 'axios';
+import { ref, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const token = ref(null);
-const route = useRoute()
-const projectId = route.params.id
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const users = ref([]);
+const selectedUserId = ref("");
+const form = ref({
+  title: "",
+  description: "",
+  deadline_date: "",
+  scrum_time: "",
+});
+const position = ref("");
+const customPosition = ref("");
+const selectedUser = ref(null);
+const showDropdown = ref(false);
+const route = useRoute();
+const projectId = route.query.projectId;
+const project = ref(null);
 
+const emit = defineEmits(["close", "submit"]);
+const memberInputs = ref([
+  { user: null, position: "", customPosition: "", showDropdown: false },
+]);
 
+console.log(projectId);
 
+onMounted(async () => {
+  const projectId = route.query.projectId;
+  console.log("projectId:", projectId);
+
+  if (!projectId) return console.warn("No projectId found in query");
+
+  try {
+    const response = await axios.get(`${backendUrl}/api/projects/${projectId}`);
+    project.value = response.data;
+    console.log("Fetched project:", project.value.project);
+
+    const p = project.value.project;
+
+    form.value.title = p.title;
+    form.value.description = p.description;
+    form.value.deadline_date = p.deadline_date;
+    form.value.scrum_time = p.scrum_time;
+
+    memberInputs.value = p.members
+      .filter((member) => member.position !== "Project Manager")
+      .map((member) => {
+        const knownPositions = [
+          "BA",
+          "UX/UI",
+          "Back-end",
+          "Front-end",
+          "Tester",
+        ];
+        const isCustom = !knownPositions.includes(member.position);
+
+        return {
+          user: member,
+          position: isCustom ? "Other..." : member.position,
+          customPosition: isCustom ? member.position : "",
+          showDropdown: false,
+        };
+      });
+  } catch (error) {
+    console.error("Failed to fetch project:", error);
+  }
+});
+
+function addMember() {
+  memberInputs.value.push({
+    user: null,
+    position: "",
+    customPosition: "",
+    showDropdown: false,
+  });
+}
+
+watch(position, (val) => {
+  if (val !== "Other...") {
+    customPosition.value = "";
+  }
+});
+
+function cancelCustomPosition() {
+  position.value = "";
+  customPosition.value = "";
+}
+
+onMounted(async () => {
+  token.value = localStorage.getItem("token");
+  try {
+    const res = await axios.get(`${backendUrl}/api/users/all`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+        "ngrok-skip-browser-warning": "true",
+      },
+      withCredentials: true,
+    });
+    users.value = res.data.users || [];
+  } catch (err) {
+    console.error("ไม่สามารถโหลดรายชื่อผู้ใช้:", err);
+  }
+});
+
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value;
+}
+
+function selectUser(user) {
+  selectedUserId.value = user.id;
+  selectedUser.value = user;
+  showDropdown.value = false;
+}
+
+async function updateProject() {
+  const id = projectId;
+  if (!id) {
+    console.error("Project ID not found");
+    return;
+  }
+
+  const payload = {
+    title: form.value.title,
+    description: form.value.description,
+    deadline_date: form.value.deadline_date,
+    scrum_time: form.value.scrum_time,
+    members: memberInputs.value.map((m) => ({
+      user_id: m.user?.id,
+      position: m.position === "Other..." ? m.customPosition : m.position,
+    })),
+  };
+
+  try {
+    await axios.put(`${backendUrl}/api/projects/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+        "ngrok-skip-browser-warning": "true",
+      },
+      withCredentials: true,
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: "อัปเดตโปรเจกต์สำเร็จ",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    emit("submit"); // แจ้ง parent ว่ามีการอัปเดต
+    emit("close");
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดขณะอัปเดตโปรเจกต์:", error);
+
+    Swal.fire({
+      icon: "error",
+      title: "เกิดข้อผิดพลาด",
+      text: error.response?.data?.message || "ไม่สามารถอัปเดตโปรเจกต์ได้",
+    });
+  }
+}
 </script>
+
+<style scoped>
+.input {
+  @apply w-full h-[35px] border border-gray-300 rounded px-3 py-2 text-[14px];
+}
+</style>
