@@ -153,139 +153,15 @@
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import axios from "axios";
-import Swal from "sweetalert2";
+import { ref, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router'
+import axios from 'axios';
 
 const token = ref(null);
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-const users = ref([]);
-const selectedUserId = ref("");
-const form = ref({
-  title: "",
-  description: "",
-  deadline_date: "",
-  scrum_time: "",
-});
-const newMember = ref("");
-const position = ref("");
-const members = ref([]);
-const customPosition = ref("");
-const selectedUser = ref(null);
-const showDropdown = ref(false);
+const route = useRoute()
+const projectId = route.params.id
 
-const emit = defineEmits(["close", "submit"]);
-const memberInputs = ref([
-  { user: null, position: "", customPosition: "", showDropdown: false },
-]);
 
-function addMember() {
-  memberInputs.value.push({
-    user: null,
-    position: "",
-    customPosition: "",
-    showDropdown: false,
-  });
-}
 
-const submitForm = async () => {
-  token.value = localStorage.getItem("token");
-  if (!token.value) {
-    Swal.fire("Error", "ไม่พบ token กรุณาเข้าสู่ระบบ", "error");
-    return;
-  }
-
-  const membersData = memberInputs.value
-    .filter((input) => input.user && (input.position || input.customPosition))
-    .map((input) => ({
-      user_id: input.user.id,
-      position:
-        input.position === "Other..." ? input.customPosition : input.position,
-    }));
-
-  const payload = {
-    ...form.value,
-    members: membersData,
-  };
-
-  console.log("Project Payload:", payload);
-
-  try {
-    const response = await axios.post(`${backendUrl}/api/projects`, payload, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-        "ngrok-skip-browser-warning": "true",
-      },
-      withCredentials: true,
-    });
-
-    console.log("บันทึกเรียบร้อย:", response.data);
-
-    Swal.fire("สำเร็จ", "สร้างโปรเจกต์เรียบร้อยแล้ว", "success");
-
-    emit("submit", response.data);
-    emit("close");
-
-    form.value = {
-      title: "",
-      description: "",
-      deadline_date: "",
-      scrum_time: "",
-    };
-    memberInputs.value = [
-      { user: null, position: "", customPosition: "", showDropdown: false },
-    ];
-  } catch (error) {
-    Swal.fire(
-      "เกิดข้อผิดพลาด",
-      error.response?.data?.message || error.message,
-      "error"
-    );
-  }
-};
-
-watch(position, (val) => {
-  if (val !== "Other...") {
-    customPosition.value = "";
-  }
-});
-
-function cancelCustomPosition() {
-  position.value = "";
-  customPosition.value = "";
-}
-
-onMounted(async () => {
-  token.value = localStorage.getItem("token");
-  try {
-    const res = await axios.get(`${backendUrl}/api/users/all`, {
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-        "ngrok-skip-browser-warning": "true",
-      },
-      withCredentials: true,
-    });
-    users.value = res.data.users || [];
-  } catch (err) {
-    console.error("ไม่สามารถโหลดรายชื่อผู้ใช้:", err);
-  }
-});
-
-function toggleDropdown() {
-  showDropdown.value = !showDropdown.value;
-}
-
-function selectUser(user) {
-  selectedUserId.value = user.id;
-  selectedUser.value = user;
-  showDropdown.value = false;
-}
 </script>
-
-<style scoped>
-.input {
-  @apply w-full h-[35px] border border-gray-300 rounded px-3 py-2 text-[14px];
-}
-</style>

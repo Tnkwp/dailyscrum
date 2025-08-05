@@ -77,10 +77,8 @@ import { ref } from "vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
-import { useUserStore } from "../stores/auth";
 
 const router = useRouter();
-const userStore = useUserStore();
 const email = ref("");
 const password = ref("");
 
@@ -107,8 +105,8 @@ async function login() {
     });
 
     localStorage.setItem("token", res.data.token);
-    userStore.setUser(email.value, res.data.token);
-    router.push("/login-success");
+
+    router.push("/homepage");
   } catch (error) {
     await Swal.fire({
       icon: "error",

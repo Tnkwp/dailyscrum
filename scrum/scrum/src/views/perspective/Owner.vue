@@ -76,7 +76,7 @@
               @click="showPopup = true"
               class="w-full bg-white text-gray-700 border border-gray-300 rounded-lg py-2 hover:bg-gray-50"
             >
-              Create Daily-scrum
+              Edit Project
             </button>
             <button
               class="w-full bg-white text-gray-700 border border-gray-300 rounded-lg py-2 hover:bg-gray-50"
@@ -260,9 +260,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import io from 'socket.io-client';
-import ScrumPopup from './ScrumPopup.vue';
+import ScrumPopup from '../ScrumPopup.vue';
+import { useRoute } from "vue-router";
 
 const showPopup = ref(false);
+const route = useRoute();
+const position = route.query.position;
+
+console.log("ตำแหน่งที่รับมา:", position);
 
 const scrumMemberss = ref([
   {
@@ -369,7 +374,4 @@ const resetForm = () => {
 </script>
 
 <style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
 </style>

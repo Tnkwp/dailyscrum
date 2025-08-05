@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
-import DailyList from "../views/login-success.vue";
 import AddDaily from "../views/AddDaily.vue";
 import Info from "../views/info.vue";
 import NotFound from "../views/NotFound.vue";
 import EditDaily from "../views/EditDaily.vue";
 import Register from "../views/register.vue";
 import Forget from "../views/Forgot.vue";
-import Perspective from "../views/Perspective.vue";
 import History from "../views/history.vue"
 import EditProfile from "../views/EditProfile.vue";
+import Homepage from "../views/Homepage.vue";
+import Member from "../views/perspective/Member.vue";
+import Owner from "../views/perspective/Owner.vue"
 
 
 const routes = [
@@ -19,9 +20,9 @@ const routes = [
     component: Login,
   },
   {
-    path: "/login-success",
-    name: "DailyList",
-    component: DailyList,
+    path: "/homepage",
+    name: "Homepage",
+    component: Homepage,
     meta: { requiresAuth: true }, 
   },
   {
@@ -53,9 +54,14 @@ const routes = [
     component: Forget,
   },
   {
-    path: "/perspective",
-    name: "Perspective",
-    component: Perspective,
+    path: "/member/:id",
+    name: "Member",
+    component: Member,
+  },
+  {
+    path: "/owner/:id",
+    name: "Owner",
+    component: Owner,
   },
   {
     path: "/history",

@@ -68,12 +68,14 @@ import { onMounted, ref, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import NotificationBell from "./NotificationBell.vue";
+import { useUserStore } from "../stores/userStore.js";
 
 const user = ref(null);
 const showMenu = ref(false);
 const token = ref(null);
 const router = useRouter();
 const route = useRoute();
+const userStore = useUserStore();
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
@@ -89,32 +91,42 @@ const closeMenuOnClickOutside = (event) => {
     showMenu.value = false;
   }
 };
-
+ 
 onMounted(async () => {
   document.addEventListener("click", closeMenuOnClickOutside);
+
   const urlToken = route.query.token;
+
   if (urlToken) {
-    token.value = urlToken;
-    localStorage.setItem("token", token.value);
+    userStore.setToken(urlToken);
+    localStorage.setItem("token", urlToken);
   } else {
-    token.value = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      userStore.setToken(storedToken);
+    }
   }
-  if (!token.value) {
+
+  if (!userStore.token) {
     console.error("No token found. Please log in.");
     return;
   }
+
   try {
     const response = await axios.get(`${BACKEND_URL}/api/users/profile`, {
       headers: {
-        Authorization: `Bearer ${token.value}`,
+        Authorization: `Bearer ${userStore.token}`,
         "ngrok-skip-browser-warning": "true",
       },
       withCredentials: true,
     });
+
+    userStore.setUser(response.data.user);
     user.value = response.data.user;
+    console.log(userStore.user.id);
   } catch (err) {
-    // Handle 401/403 errors by logging out user
     if (err.response?.status === 401 || err.response?.status === 403) {
+      userStore.clearAuth();
       localStorage.removeItem("token");
       router.push("/");
     }
@@ -136,6 +148,7 @@ const toggleMenu = (event) => {
 
 function handleLogout() {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
   router.push("/");
 }
 </script>
